@@ -53,7 +53,7 @@ async function loadImages(batchCount = 1) {
 function loadThumbnail(index) {
     return new Promise((resolve) => {
         const thumbImg = new Image();
-        thumbImg.src = `images/thumbs/${index}.jpg`;
+        thumbImg.src = `./images/thumbs/${index}.jpg`;
 
         thumbImg.onload = function () {
             createImageElement(thumbImg, index, resolve);
@@ -72,7 +72,7 @@ function loadThumbnail(index) {
 
         function createImageElement(thumbImg, index, resolve) {
             const imgElement = document.createElement('img');
-            imgElement.dataset.large = `images/${index}.jpg`;
+            imgElement.dataset.large = `./images/${index}.jpg`;
             imgElement.src = thumbImg.src;
             imgElement.alt = `Image ${index}`;
             imgElement.setAttribute('data-date', '');
