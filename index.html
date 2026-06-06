@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Our Love Journey</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="apple-touch-icon" sizes="180x180" href="readme_img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="readme_img/favicon//favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="readme_img/favicon//favicon-16x16.png">
+    <link rel="manifest" href="readme_img/favicon//site.webmanifest">
+</head>
+<body>
+    <canvas id="heartCanvas"></canvas>
+
+    <nav>
+        <div class="container">
+            <h1>Our Love Journey</h1>
+        </div>
+    </nav>
+
+    <main>
+        <section id="name">
+            <h2>wanfuhao & yuxueni</h2> <!--**Name**-->
+        </section>
+
+        <section id="timer">
+            <audio id="bgm" src="music/music1.mp3" controls></audio>
+            <p>We have been in love for</p>
+            <h2><span id="loveDays">0</span> Days</h2>
+        </section>
+
+        <section id="dates">
+            <div class="date-item">
+                <p>2000.06.27</p> <!--**Birthday**-->
+                <span>His Birthday</span>
+            </div>
+            <div class="date-item">
+                <p>2001.03.20</p> <!--**Birthday**-->
+                <span>Her Birthday</span>
+            </div>
+            <div class="date-item">
+                <p>2020.01.01</p> <!--**Love date**-->
+                <span>Anniversary</span>
+            </div>
+        </section>
+
+        <section id="gallery">
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; Written by <a href="https://github.com/liaoyanqing666/" target="_blank">liaoyanqing666</a>. Project at: <a href="https://github.com/liaoyanqing666/Photo_Wall" target="_blank">Photo_Wall</a>.</p>
+        </div>
+    </footer>
+
+    <div id="popup">
+        <span id="closeBtn">&times;</span>
+        <p id="imgDate"></p>
+        <img id="popupImg" src="" alt="Large Image">
+    </div>
+
+    <div id="leftArrow" class="arrow">❮</div>
+    <div id="rightArrow" class="arrow">❯</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exif-js/2.3.0/exif.min.js"></script>
+    <script src="script.js"></script>
+    <script src="hearts.js"></script>
+</body>
+</html>
