@@ -11,13 +11,14 @@ let rightArrow;
 
 // Calculate the number of days since the start date
 function calculateLoveDays() {
-    const startDate = new Date('2024-02-17'); // **Love date**
+    // Parse date parts explicitly to avoid timezone issues on mobile
+    const startParts = '2024-02-17'.split('-').map(Number);
+    const start = new Date(startParts[0], startParts[1] - 1, startParts[2]);
     const today = new Date();
-    startDate.setHours(0, 0, 0, 0);
-    today.setHours(0, 0, 0, 0);
-    const timeDiff = today - startDate;
+    const todayLocal = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const timeDiff = todayLocal - start;
     const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-    document.getElementById('loveDays').innerText = days;
+    document.getElementById('loveDays').textContent = days;
 }
 
 // Load images in batches when the user scrolls to the bottom of the page
@@ -52,7 +53,6 @@ async function loadImages(batchCount = 1) {
 function loadThumbnail(index) {
     return new Promise((resolve) => {
         const thumbImg = new Image();
-        thumbImg.crossOrigin = 'Anonymous';
         thumbImg.src = `images/thumbs/${index}.jpg`;
 
         thumbImg.onload = function () {
@@ -78,20 +78,30 @@ function loadThumbnail(index) {
             imgElement.setAttribute('data-date', '');
             imgElement.setAttribute('data-index', index);
 
-            EXIF.getData(thumbImg, function () {
-                let exifDate = EXIF.getTag(this, 'DateTimeOriginal');
-                if (exifDate) {
-                    exifDate = exifDate.replace(/^(\d{4}):(\d{2}):(\d{2}).*$/, '$1.$2.$3');
-                } else {
-                    exifDate = '';
+            // EXIF data is optional; wrap in try-catch so failures don't block image display
+            try {
+                if (typeof EXIF !== 'undefined' && EXIF.getData) {
+                    EXIF.getData(thumbImg, function () {
+                        try {
+                            let exifDate = EXIF.getTag(this, 'DateTimeOriginal');
+                            if (exifDate) {
+                                exifDate = exifDate.replace(/^(\d{4}):(\d{2}):(\d{2}).*$/, '$1.$2.$3');
+                            } else {
+                                exifDate = '';
+                            }
+                            imgElement.setAttribute('data-date', exifDate);
+                            loadedImages[index] = {
+                                src: imgElement.dataset.large,
+                                date: exifDate,
+                            };
+                        } catch (e) {
+                            // EXIF callback failed, date stays empty
+                        }
+                    });
                 }
-                imgElement.setAttribute('data-date', exifDate);
-
-                loadedImages[index] = {
-                    src: imgElement.dataset.large,
-                    date: exifDate,
-                };
-            });
+            } catch (e) {
+                // EXIF not available or failed; images still load fine
+            }
 
             imgElement.addEventListener('click', function () {
                 showPopup(imgElement.dataset.large, imgElement.getAttribute('data-date'), index);
@@ -115,20 +125,19 @@ function showPopup(src, date, index) {
     popup.style.display = 'block';
 
     popupImg.style.display = 'none';
-    imgDate.innerText = '';
+    imgDate.textContent = '';
 
     const fullImg = new Image();
-    fullImg.crossOrigin = 'Anonymous';
     fullImg.src = src;
 
     fullImg.onload = function () {
         popupImg.src = src;
         popupImg.style.display = 'block';
-        imgDate.innerText = date;
+        imgDate.textContent = date;
     };
 
     fullImg.onerror = function () {
-        imgDate.innerText = 'Load failed';
+        imgDate.textContent = 'Load failed';
     };
 
     leftArrow.style.display = 'flex';
@@ -154,7 +163,7 @@ function closePopup() {
     const imgDate = document.getElementById('imgDate');
     popup.style.display = 'none';
     popupImg.src = '';
-    imgDate.innerText = '';
+    imgDate.textContent = '';
 
     leftArrow.style.display = 'none';
     rightArrow.style.display = 'none';
