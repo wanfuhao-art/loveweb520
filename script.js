@@ -11,14 +11,12 @@ let rightArrow;
 
 // Calculate the number of days since the start date
 function calculateLoveDays() {
-    // Parse date parts explicitly to avoid timezone issues on mobile
-    const startParts = '2024-02-17'.split('-').map(Number);
-    const start = new Date(startParts[0], startParts[1] - 1, startParts[2]);
+    //相恋日期 2024-02-17
+    const start = new Date(2024,1,17);
     const today = new Date();
-    const todayLocal = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    const timeDiff = todayLocal - start;
-    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-    document.getElementById('loveDays').textContent = days;
+    let diff = Math.floor((today - start) / (1000*60*60*24));
+    if(diff < 0) diff = 0;
+    document.getElementById('loveDays').textContent = diff;
 }
 
 // Load images in batches when the user scrolls to the bottom of the page
@@ -61,7 +59,7 @@ function loadThumbnail(index) {
 
         // If the thumbnail image fails to load, try loading the full-size image
         thumbImg.onerror = function () {
-            thumbImg.src = `images/${index}.jpg`;
+            thumbImg.src = `./images/${index}.jpg`;
             thumbImg.onload = function () {
                 createImageElement(thumbImg, index, resolve);
             };
